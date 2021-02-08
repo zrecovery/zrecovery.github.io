@@ -1,0 +1,17 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"/><meta name="og:site_name" content="zrecovery的小站"/><link rel="canonical" href="https://zrecovery.github.io/posts/%E5%9C%A8FreeBSD%E4%B8%8A%E9%83%A8%E7%BD%B2mDNS"/><meta name="twitter:url" content="https://zrecovery.github.io/posts/%E5%9C%A8FreeBSD%E4%B8%8A%E9%83%A8%E7%BD%B2mDNS"/><meta name="og:url" content="https://zrecovery.github.io/posts/%E5%9C%A8FreeBSD%E4%B8%8A%E9%83%A8%E7%BD%B2mDNS"/><title>在FreeBSD/TrueNAS上启用mDNS | zrecovery的小站</title><meta name="twitter:title" content="在FreeBSD/TrueNAS上启用mDNS | zrecovery的小站"/><meta name="og:title" content="在FreeBSD/TrueNAS上启用mDNS | zrecovery的小站"/><meta name="description" content="在FreeBSD/TrueNAS上部署mDNS"/><meta name="twitter:description" content="在FreeBSD/TrueNAS上部署mDNS"/><meta name="og:description" content="在FreeBSD/TrueNAS上部署mDNS"/><meta name="twitter:card" content="summary"/><link rel="stylesheet" href="/styles.css" type="text/css"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link rel="shortcut icon" href="/images/favicon.png" type="image/png"/><link rel="alternate" href="/feed.rss" type="application/rss+xml" title="Subscribe to zrecovery的小站"/></head><body class="item-page"><header><div class="wrapper"><a class="site-name" href="/">zrecovery的小站</a></div></header><div class="wrapper"><article><div class="content"><h1>在FreeBSD/TrueNAS上启用mDNS</h1><p>本文内容已在在FreeBSD 12.2和TrueNAS平台中Jail环境（12.2）测试。</p><h2>背景</h2><p>在局域网中，如果要连接一台设备，首先会想到通过IP地址连接。但IP地址不易记忆，并且在某些强制动态分配地址情况下，IP地址会发生变化，影响连接。</p><h2>mDNS简介</h2><p>仿造广域网中域名和其解析系统，产生了mDNS——多播域名系统。用户可以通过*.local 与目标设备连接。 - 默认端口5353 - 协议文档RFC 6762。</p><h2>安装和配置</h2><p>存在两种mDNS服务，苹果公司开发的mDNSResponder和Lennart Poettering开发的Avahi。</p><p>虽然TrueNAS主系统使用Avahi，但考虑到macOS本身就采用BSD接口，Avahi又是仿造mDNSResponder的LGPL实现，因此采用mDNSResponder。</p><p>假定域名为“hostname.local”，根据需要替换“hostname”。</p><p>配置过程需要管理员权限，需自行使用root账户或使用sudo提权。</p><p>安装mDNSResponder_nss：</p><pre><code>pkg install mDNSResponder_nss
+
+</code></pre><p>允许开机启动并指定配置文件位置：</p><pre><code>sysrc mdnsd_enable="YES"
+sysrc mdnsresponderposix_enable="YES"
+# 指定配置文件位置：
+sysrc mdnsresponderposix_flags="-f /usr/local/etc/mdnsresponderposix.conf"
+</code></pre><p>创建配置文件：</p><pre><code>touch /usr/local/etc/mdnsresponderposix.conf
+</code></pre><p>编辑/usr/local/etc/mdnsresponderposix.conf文件，输入：</p><pre><code>hostname #此次根据实际域名替换
+_http._tcp
+80
+</code></pre><p>编辑/etc/nsswitch.conf文件：</p><pre><code># 在hosts: files dns添加 mdns
+hosts: files mdns dns
+</code></pre><p>启动服务，因为可能其他软件包也会引入mDNSResponder_nss，所以使用restart确保服务载入配置并启动。</p><pre><code>service mdnsd restart
+service mdnsresponderposix restart
+service nsswitch restart
+</code></pre><p>完成以上工作后等待设备收到多播信息，大概2到10分钟，然后测试一下</p><pre><code>ping hostname.local
+</code></pre><p>不出意外就可以收到连接信息。</p><p>以上步骤都是在服务器上完成的，如果需要Windows 10通过hostname.local连接，需要安装接收组件。最常用的接收组件是苹果公司iTunes中附带的Bonjour（所以推荐mDNSResponder），下载iTunes安装即可通过域名连接。</p></div><span>Tagged with: </span><ul class="tag-list"><li><a href="/tags/mdns">mDNS</a></li><li><a href="/tags/freebsd">FreeBSD</a></li><li><a href="/tags/truenas">TrueNAS</a></li></ul></article></div><footer><p>Generated using <a href="https://github.com/johnsundell/publish">Publish</a></p><p><a href="/feed.rss">RSS feed</a></p></footer></body></html>
