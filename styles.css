@@ -25,39 +25,6 @@ body {
     text-align: left;
 }
 
-/* Tags Color */
-.tag.variant-0 {
-    background-color: #66293c !important;
-}
-
-.tag.variant-1 {
-    background-color: #913e37 !important;
-}
-
-.tag.variant-2 {
-    background-color: #ca7618 !important;
-}
-
-.variant-3 {
-    background-color: #a38138 !important;
-}
-
-.variant-4 {
-    background-color: #2f7176 !important;
-}
-
-.variant-5 {
-    background-color: #246089 !important;
-}
-
-.variant-6 {
-    background-color: #498840 !important;
-}
-
-.variant-7 {
-    background-color: #484781 !important;
-}
-
 header {
     background-color: #eee;
 }
@@ -74,7 +41,7 @@ header a {
 
 header .site-name {
     font-size: 1.5em;
-    color: #f5f5f5;
+    color: #535252;
 }
 
 nav {
@@ -110,6 +77,12 @@ a {
 
 .description {
     margin-bottom: 40px;
+    text-align: center;
+}
+
+pre {
+    background-color: #ddd;
+    padding: 10px;
 }
 
 .item-list > li {
