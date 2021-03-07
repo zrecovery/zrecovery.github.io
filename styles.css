@@ -41,7 +41,8 @@ header a {
 
 header .site-name {
     font-size: 1.5em;
-    color: #535252;
+    color: #000;
+    font-weight: bold;
 }
 
 nav {
@@ -77,19 +78,13 @@ a {
 
 .description {
     margin-bottom: 40px;
-    text-align: center;
-}
-
-pre {
-    background-color: #ddd;
-    padding: 10px;
 }
 
 .item-list > li {
     display: block;
     padding: 20px;
     border-radius: 20px;
-    background-color: #fff;
+    background-color: #eee;
     margin-bottom: 20px;
 }
 
@@ -113,8 +108,8 @@ pre {
 .tag-list li,
 .tag {
     display: inline-block;
-    background-color: #fff;
-    color: #222;
+    background-color: #000;
+    color: #ddd;
     padding: 4px 6px;
     border-radius: 5px;
     margin-right: 5px;
@@ -150,20 +145,20 @@ footer {
 
 @media (prefers-color-scheme: dark) {
     body {
-        background-color: #fff;
+        background-color: #222;
     }
 
     body,
     header .site-name {
-        color: #111;
+        color: #ddd;
     }
 
     .item-list > li {
-        background-color: #eee;
+        background-color: #333;
     }
 
     header {
-        background-color: #f5f5f5;
+        background-color: #000;
     }
 }
 
@@ -172,5 +167,3 @@ footer {
         padding: 40px 20px;
     }
 }
-
-
